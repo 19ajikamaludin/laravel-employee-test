@@ -222,7 +222,7 @@ $(document).ready(function() {
         $('#departmentFilter').val('').trigger('change');
         $('#statusFilter').val('').trigger('change');
         $('#genderFilter').val('').trigger('change');
-        $('#joinDateFilter').data('daterangepicker').setStartDate(moment().subtract(6, 'years')).setEndDate(moment());
+        $('#joinDateFilter').data('daterangepicker').setStartDate(moment().subtract(6, 'years'));
         employeeTable.search('').draw();
     });
 });
