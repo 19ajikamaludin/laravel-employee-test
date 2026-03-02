@@ -70,7 +70,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Jenis Kelamin</label>
-                            <select class="form-select" name="gender" required>
+                            <select class="form-select select2" name="gender" required>
                                 <option value="">Pilih...</option>
                                 <option value="Laki-laki">Laki-laki</option>
                                 <option value="Perempuan">Perempuan</option>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Tanggal Lahir</label>
-                            <input type="date" class="form-control" name="birth_date" required>
+                            <input type="text" class="form-control datepicker" name="birth_date" required>
                         </div>
                     </div>
                     
@@ -96,7 +96,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Departemen</label>
-                            <select class="form-select" name="department" required>
+                            <select class="form-select select2" name="department" required>
                                 <option value="">Pilih...</option>
                                 @foreach($departments as $dept)
                                     <option value="{{ $dept }}">{{ $dept }}</option>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Posisi</label>
-                            <select class="form-select" name="position" required>
+                            <select class="form-select select2" name="position" required>
                                 <option value="">Pilih...</option>
                                 @foreach($positions as $pos)
                                     <option value="{{ $pos }}">{{ $pos }}</option>
@@ -114,7 +114,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Status</label>
-                            <select class="form-select" name="status" required>
+                            <select class="form-select select2" name="status" required>
                                 <option value="">Pilih...</option>
                                 <option value="Aktif">Aktif</option>
                                 <option value="Non-Aktif">Non-Aktif</option>
@@ -125,7 +125,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Tanggal Masuk</label>
-                            <input type="date" class="form-control" name="join_date" required>
+                            <input type="text" class="form-control datepicker" name="join_date" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Gaji (Rp)</label>
@@ -149,6 +149,20 @@
 @section('scripts')
 <script>
 $(document).ready(function() {
+    $('.datepicker').daterangepicker({
+        locale: {
+            format: 'DD MMMM YYYY',
+            applyLabel: 'Pilih',
+            cancelLabel: 'Batal',
+            daysOfWeek: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+            monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+        },
+        singleDatePicker: true,
+        showDropdowns: true,
+        drops: 'down',
+        opens: 'right'
+    });
+
     $('#photo').change(function(e) {
         const file = e.target.files[0];
         if (file) {

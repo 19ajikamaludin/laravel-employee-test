@@ -11,6 +11,33 @@ class EmployeeRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $dateFields = ['birth_date', 'join_date'];
+
+        foreach ($dateFields as $field) {
+            if ($this->has($field) && $this->$field) {
+                $this->merge([
+                    $field => $this->convertDate($this->$field),
+                ]);
+            }
+        }
+    }
+
+    protected function convertDate(string $date): string
+    {
+        $indonesianMonths = [
+            'Januari' => 'January', 'Februari' => 'February', 'Maret' => 'March',
+            'April' => 'April', 'Mei' => 'May', 'Juni' => 'June',
+            'Juli' => 'July', 'Agustus' => 'August', 'September' => 'September',
+            'Oktober' => 'October', 'November' => 'November', 'Desember' => 'December',
+        ];
+
+        $date = str_replace(array_keys($indonesianMonths), array_values($indonesianMonths), $date);
+
+        return \Carbon\Carbon::parse($date)->format('Y-m-d');
+    }
+
     public function rules(): array
     {
         $employee = $this->route('employee');

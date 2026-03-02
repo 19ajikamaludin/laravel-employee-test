@@ -18,7 +18,7 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-2">
-                        <select id="departmentFilter" class="form-select">
+                        <select id="departmentFilter" class="form-select select2">
                             <option value="">Semua Dept</option>
                             <option value="IT">IT</option>
                             <option value="HR">HR</option>
@@ -31,20 +31,23 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <select id="statusFilter" class="form-select">
+                        <select id="statusFilter" class="form-select select2">
                             <option value="">Semua Status</option>
                             <option value="Aktif">Aktif</option>
                             <option value="Non-Aktif">Non-Aktif</option>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <select id="genderFilter" class="form-select">
+                        <select id="genderFilter" class="form-select select2">
                             <option value="">Semua Gender</option>
                             <option value="Laki-laki">Laki-laki</option>
                             <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
+                        <input type="text" id="joinDateFilter" class="form-control" placeholder="Pilih Tanggal Masuk">
+                    </div>
+                    <div class="col-md-1">
                         <button type="button" id="resetFilter" class="btn btn-outline-secondary w-100">
                             <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
                         </button>
@@ -111,6 +114,11 @@ $(document).ready(function() {
                 d.department = $('#departmentFilter').val();
                 d.status = $('#statusFilter').val();
                 d.gender = $('#genderFilter').val();
+                const joinDate = $('#joinDateFilter').data('daterangepicker');
+                if (joinDate) {
+                    d.join_date_start = joinDate.startDate.format('YYYY-MM-DD');
+                    d.join_date_end = joinDate.endDate.format('YYYY-MM-DD');
+                }
             }
         },
         columns: [
@@ -188,11 +196,33 @@ $(document).ready(function() {
         employeeTable.draw();
     });
 
+    $('#joinDateFilter').daterangepicker({
+        locale: {
+            format: 'DD MMMM YYYY',
+            applyLabel: 'Pilih',
+            cancelLabel: 'Batal',
+            fromLabel: 'Dari',
+            toLabel: 'Sampai',
+            customRangeLabel: 'Pilih Tanggal',
+            daysOfWeek: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
+            monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+        },
+        startDate: moment().subtract(6, 'years'),
+        endDate: moment(),
+        drops: 'down',
+        opens: 'right'
+    }).on('apply.daterangepicker', function() {
+        employeeTable.draw();
+    });
+
+    employeeTable.draw();
+
     $('#resetFilter').on('click', function() {
         $('#searchFilter').val('');
         $('#departmentFilter').val('').trigger('change');
         $('#statusFilter').val('').trigger('change');
         $('#genderFilter').val('').trigger('change');
+        $('#joinDateFilter').data('daterangepicker').setStartDate(moment().subtract(6, 'years')).setEndDate(moment());
         employeeTable.search('').draw();
     });
 });

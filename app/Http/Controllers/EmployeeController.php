@@ -130,6 +130,14 @@ class EmployeeController extends Controller
             $query->where('gender', $request->gender);
         }
 
+        if ($request->has('join_date_start') && $request->join_date_start) {
+            $query->where('join_date', '>=', $request->join_date_start);
+        }
+
+        if ($request->has('join_date_end') && $request->join_date_end) {
+            $query->where('join_date', '<=', $request->join_date_end);
+        }
+
         $total = Employee::count();
         $filteredCount = $query->count();
 
